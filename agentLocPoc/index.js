@@ -32,8 +32,39 @@ async function initMap() {
     // console.log(agentLocation);
     geocodeLatLng(geocoder, map,infowindow,agentinfo[i]);
   }
-  
-
+//   setInterval(  function() {
+//     let resp = loadAgentData();
+//   }, 15000);
+//  function loadAgentData(){
+//     let post = `{
+//       "appName":"in.fl.uplift.agent",
+//       "customerId":"100000002",
+//       "device_id":"-b040-4513-9011-439a24476860",
+//       "installId":"0",
+//       "random":"1682687048246",
+//       "requestCreatedAt":"2023-04-28, 18:34:26",
+//       "version":"39.00"
+//   }
+//   `;
+//     fetch("https://app.friendloan.in/FLUPLIFT/getAgentTrackingDetails", {
+//       // mode: 'no-cors',
+//     method: 'post',
+//     body: post,
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Access-Control-Allow-Origin' : 'http://localhost'
+//     }
+// // }).then((response) => {
+// //     return response.json()
+// }).then((res) => {
+//     if (res.status === 201) {
+//         console.log("Post successfully created!");
+//         console.log(res.json);
+//     }
+// }).catch((error) => {
+//     console.log(error)
+// })
+  // }
   //This event listener calls addMarker() when the map is clicked.
   // google.maps.event.addListener(map, "click", (event) => {
   // //   addMarker(event.latLng, map,labels[labelIndex++ % labels.length]);
@@ -106,7 +137,7 @@ async function geocodeLatLng(geocoder, map,infowindow,agentinfo) {
         map.setZoom(11);
         const currentPin = extractPincode(response.results[0].formatted_address);
         //alert(currentPin);
-        const allocPinList = agentinfo.allocPin.split(",");
+        const allocPinList = agentinfo.pincode.split(",");
         allocPinList[0]
         let clrClass = "yellow";
         if(currentPin != null){
@@ -134,6 +165,7 @@ async function geocodeLatLng(geocoder, map,infowindow,agentinfo) {
           content: beachFlagImg,
           title: agentinfo.name,
         });
+        //marker.position
         marker.addListener("click", ({ domEvent, latLng }) => {
           const { target } = domEvent;
     
