@@ -2,13 +2,14 @@
 // Each marker is labeled with a single alphabetical character.
 const labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 let labelIndex = 0;
+const AgentMarkerArr = [];
 async function initMap() {
-  
+
   const { Map } = await google.maps.importLibrary("maps");
   const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
   // const bangalore = { lat: 12.97, lng: 77.59 };
-  const chennai = {lat: 13.067439, lng: 80.237617};
+  const chennai = { lat: 13.067439, lng: 80.237617 };
   const map = new Map(document.getElementById("map"), {
     zoom: 11,
     center: chennai,
@@ -16,11 +17,10 @@ async function initMap() {
   });
 
   const geocoder = new google.maps.Geocoder();
-  const infowindow = new google.maps.InfoWindow();
   const agentinfo = JSON.parse(document.getElementById("agentLocJson").innerHTML);
-  console.log(JSON.stringify(agentinfo));
-  console.log(agentinfo);
-  console.log(agentinfo[1]);
+  //console.log(JSON.stringify(agentinfo));
+  //console.log(agentinfo);
+  //console.log(agentinfo[1]);
   for (let i = 0; i < agentinfo.length; i++) {
     console.log(JSON.stringify(agentinfo[i]));
     // const input = agentinfo[i].currLoc;
@@ -30,41 +30,14 @@ async function initMap() {
     //   lng: parseFloat(latlngStr[1]),
     // };
     // console.log(agentLocation);
-    geocodeLatLng(geocoder, map,infowindow,agentinfo[i]);
+    geocodeLatLng(geocoder, map, agentinfo[i]);
   }
-//   setInterval(  function() {
-//     let resp = loadAgentData();
-//   }, 15000);
-//  function loadAgentData(){
-//     let post = `{
-//       "appName":"in.fl.uplift.agent",
-//       "customerId":"100000002",
-//       "device_id":"-b040-4513-9011-439a24476860",
-//       "installId":"0",
-//       "random":"1682687048246",
-//       "requestCreatedAt":"2023-04-28, 18:34:26",
-//       "version":"39.00"
-//   }
-//   `;
-//     fetch("https://app.friendloan.in/FLUPLIFT/getAgentTrackingDetails", {
-//       // mode: 'no-cors',
-//     method: 'post',
-//     body: post,
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Access-Control-Allow-Origin' : 'http://localhost'
-//     }
-// // }).then((response) => {
-// //     return response.json()
-// }).then((res) => {
-//     if (res.status === 201) {
-//         console.log("Post successfully created!");
-//         console.log(res.json);
-//     }
-// }).catch((error) => {
-//     console.log(error)
-// })
-  // }
+  //getAgentData(geocoder,map);
+    setInterval(  function() {
+      console.log("errasing markers!!!!");
+      getAgentData(geocoder, map);
+    }, 15000);
+  
   //This event listener calls addMarker() when the map is clicked.
   // google.maps.event.addListener(map, "click", (event) => {
   // //   addMarker(event.latLng, map,labels[labelIndex++ % labels.length]);
@@ -87,7 +60,60 @@ async function initMap() {
   //   content: agentTag,
   // });
 }
+function getAgentData(geocoder, map) {
+  let post = `{
+    "appName":"in.fl.uplift.agent",
+    "customerId":"100000002",
+    "device_id":"-b040-4513-9011-439a24476860",
+    "installId":"0",
+    "random":"1682687048246",
+    "requestCreatedAt":"2023-04-28, 18:34:26",
+    "version":"39.00"
+  }`;
+  fetch("https://app.friendloan.in/FLUPLIFT/getAgentTrackingDetails", {
+    // mode: 'no-cors',
+    method: 'post',
+    body: post,
+    headers: {
+      'Content-Type': 'application/json',
+    //  'Access-Control-Allow-Origin': 'http://localhost'
+    }
+    }).then((response) => {
+        return response.json()
+  }).then((res) => {
+    console.log(res);
+    plotAgentMarkers(geocoder, map,res);
+  }).catch((error) => {
+    alert("Error in fetching agent Data!!!");
+    console.log(error)
+  })
 
+}
+function erraseAgentMarkers(){
+let arrLen = AgentMarkerArr.length;
+for (let i = 0; i < arrLen; i++) {
+  AgentMarkerArr[i].map = null;
+}
+}
+
+function plotAgentMarkers(geocoder, map,res){
+  erraseAgentMarkers();
+  const agentinfo = res.agentDetails;
+  //console.log(JSON.stringify(agentinfo));
+  console.log(agentinfo);
+  console.log(agentinfo[1]);
+  for (let i = 0; i < agentinfo.length; i++) {
+    console.log(JSON.stringify(agentinfo[i]));
+    // const input = agentinfo[i].currLoc;
+    // const latlngStr = input.split(",");
+    // const agentLocation = {
+    //   lat: parseFloat(latlngStr[0]),
+    //   lng: parseFloat(latlngStr[1]),
+    // };
+    // console.log(agentLocation);
+    geocodeLatLng(geocoder, map, agentinfo[i]);
+  }
+}
 // Adds a marker to the map.
 // function addMarker(location, map, name) {
 //   // Add the marker at the clicked location, and add the next-available label
@@ -99,29 +125,29 @@ async function initMap() {
 //   });
 // }
 const is6DigitNum = (num) => /^\d{6}$/gm.test(num);
-function extractPincode(address){
+function extractPincode(address) {
   const addrList = address.split(" ");
   let flag = null;
   let pincode = null;
   //alert(addrList);
   for (let i = 0; i < addrList.length; i++) {
-    let txt = addrList[i].replaceAll(/\s/g,'');
-    txt = txt.replaceAll(/,/g,'');
+    let txt = addrList[i].replaceAll(/\s/g, '');
+    txt = txt.replaceAll(/,/g, '');
     txt = txt.toLowerCase();
     //alert(txt);
-    if(txt == "nadu" && i+1<addrList.length){
-      let addressPart = addrList[i+1];
-      addressPart = addressPart.replaceAll(/,/g,'');
+    if (txt == "nadu" && i + 1 < addrList.length) {
+      let addressPart = addrList[i + 1];
+      addressPart = addressPart.replaceAll(/,/g, '');
       //alert(addressPart);
-      if(is6DigitNum(addressPart)) {
+      if (is6DigitNum(addressPart)) {
         pincode = addressPart;
       }
     }
-    
+
   }
   return pincode;
 }
-async function geocodeLatLng(geocoder, map,infowindow,agentinfo) {
+async function geocodeLatLng(geocoder, map, agentinfo) {
   const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
   const input = agentinfo.currLoc;
   const latlngStr = input.split(",");
@@ -129,7 +155,7 @@ async function geocodeLatLng(geocoder, map,infowindow,agentinfo) {
     lat: parseFloat(latlngStr[0]),
     lng: parseFloat(latlngStr[1]),
   };
-  console.log(agentLocation);
+  //console.log(agentLocation);
   geocoder
     .geocode({ location: agentLocation })
     .then((response) => {
@@ -140,10 +166,10 @@ async function geocodeLatLng(geocoder, map,infowindow,agentinfo) {
         const allocPinList = agentinfo.pincode.split(",");
         allocPinList[0]
         let clrClass = "yellow";
-        if(currentPin != null){
+        if (currentPin != null) {
           clrClass = "red";
           for (let i = 0; i < allocPinList.length; i++) {
-            if (allocPinList[i] == currentPin){
+            if (allocPinList[i] == currentPin) {
               clrClass = "green";
             }
           }
@@ -177,22 +203,22 @@ async function geocodeLatLng(geocoder, map,infowindow,agentinfo) {
         // agentTag.className = "agent-name "+clrClass;
         // agentTag.textContent = agentName;
 
-        const beachFlagImg = document.createElement("img");
+        // const beachFlagImg = document.createElement("img");
 
-        beachFlagImg.src = agentinfo.image;
-      
-          beachFlagImg.className = "agent-name "+clrClass;
+        // beachFlagImg.src = agentinfo.image;
+
+        // beachFlagImg.className = "agent-name " + clrClass;
         const marker = new AdvancedMarkerElement({
           map,
           position: agentLocation,
           content: content,
           title: agentinfo.name,
         });
-        
+
         marker.addListener("click", () => {
           toggleHighlight(marker);
         });
-
+        AgentMarkerArr.push(marker);
       } else {
         window.alert("No results found");
       }
