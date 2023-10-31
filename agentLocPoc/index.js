@@ -8,7 +8,6 @@ async function initMap() {
   const { Map } = await google.maps.importLibrary("maps");
   const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
-  // const bangalore = { lat: 12.97, lng: 77.59 };
   const chennai = { lat: 13.067439, lng: 80.237617 };
   const map = new Map(document.getElementById("map"), {
     zoom: 11,
@@ -17,48 +16,13 @@ async function initMap() {
   });
 
   const geocoder = new google.maps.Geocoder();
-  const agentinfo = JSON.parse(document.getElementById("agentLocJson").innerHTML);
-  //console.log(JSON.stringify(agentinfo));
-  //console.log(agentinfo);
-  //console.log(agentinfo[1]);
-  for (let i = 0; i < agentinfo.length; i++) {
-    console.log(JSON.stringify(agentinfo[i]));
-    // const input = agentinfo[i].currLoc;
-    // const latlngStr = input.split(",");
-    // const agentLocation = {
-    //   lat: parseFloat(latlngStr[0]),
-    //   lng: parseFloat(latlngStr[1]),
-    // };
-    // console.log(agentLocation);
-    geocodeLatLng(geocoder, map, agentinfo[i]);
-  }
-  //getAgentData(geocoder,map);
+  getAgentData(geocoder, map);
     setInterval(  function() {
       console.log("errasing markers!!!!");
       getAgentData(geocoder, map);
-    }, 15000);
+    }, 60000);
   
-  //This event listener calls addMarker() when the map is clicked.
-  // google.maps.event.addListener(map, "click", (event) => {
-  // //   addMarker(event.latLng, map,labels[labelIndex++ % labels.length]);
-  //   geocodeLatLng(geocoder, map, event.latLng, "Agent "+labels[labelIndex++ % labels.length]);
-  // });
 
-
-  // Add a marker at the center of the map.
-  //addMarker(bangalore, map,"bangalore");
-
-  // const agentTag = document.createElement("div");
-
-  // agentTag.className = "agent-name";
-  // agentTag.textContent = "chennai";
-
-  // //addMarker(chennai, map,"chennai");
-  // const marker = new AdvancedMarkerElement({
-  //   map,
-  //   position: chennai,
-  //   content: agentTag,
-  // });
 }
 function getAgentData(geocoder, map) {
   let post = `{
@@ -71,12 +35,10 @@ function getAgentData(geocoder, map) {
     "version":"39.00"
   }`;
   fetch("https://app.friendloan.in/FLUPLIFT/getAgentTrackingDetails", {
-    // mode: 'no-cors',
     method: 'post',
     body: post,
     headers: {
       'Content-Type': 'application/json',
-    //  'Access-Control-Allow-Origin': 'http://localhost'
     }
     }).then((response) => {
         return response.json()
@@ -99,31 +61,14 @@ for (let i = 0; i < arrLen; i++) {
 function plotAgentMarkers(geocoder, map,res){
   erraseAgentMarkers();
   const agentinfo = res.agentDetails;
-  //console.log(JSON.stringify(agentinfo));
-  console.log(agentinfo);
-  console.log(agentinfo[1]);
   for (let i = 0; i < agentinfo.length; i++) {
-    console.log(JSON.stringify(agentinfo[i]));
-    // const input = agentinfo[i].currLoc;
-    // const latlngStr = input.split(",");
-    // const agentLocation = {
-    //   lat: parseFloat(latlngStr[0]),
-    //   lng: parseFloat(latlngStr[1]),
-    // };
-    // console.log(agentLocation);
-    geocodeLatLng(geocoder, map, agentinfo[i]);
+    //console.log(JSON.stringify(agentinfo[i]));
+    if(agentinfo[i].currLoc != null && agentinfo[i].currLoc !== "" ){
+      geocodeLatLng(geocoder, map, agentinfo[i]);
+    }
   }
 }
-// Adds a marker to the map.
-// function addMarker(location, map, name) {
-//   // Add the marker at the clicked location, and add the next-available label
-//   // from the array of alphabetical characters.
-//   new google.maps.Marker({
-//     position: location,
-//     label: name,
-//     map: map,
-//   });
-// }
+
 const is6DigitNum = (num) => /^\d{6}$/gm.test(num);
 function extractPincode(address) {
   const addrList = address.split(" ");
@@ -160,7 +105,6 @@ async function geocodeLatLng(geocoder, map, agentinfo) {
     .geocode({ location: agentLocation })
     .then((response) => {
       if (response.results[0]) {
-        map.setZoom(11);
         const currentPin = extractPincode(response.results[0].formatted_address);
         //alert(currentPin);
         const allocPinList = agentinfo.pincode.split(",");
@@ -198,16 +142,7 @@ async function geocodeLatLng(geocoder, map, agentinfo) {
               <div class="line">
                 ${agentinfo.line1}
               </div>`;
-        // const agentTag = document.createElement("div");
 
-        // agentTag.className = "agent-name "+clrClass;
-        // agentTag.textContent = agentName;
-
-        // const beachFlagImg = document.createElement("img");
-
-        // beachFlagImg.src = agentinfo.image;
-
-        // beachFlagImg.className = "agent-name " + clrClass;
         const marker = new AdvancedMarkerElement({
           map,
           position: agentLocation,
