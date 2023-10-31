@@ -599,7 +599,7 @@
     <title>Marker Labels</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 
-    <link rel="stylesheet" type="text/css" href="./style.css?v=1.8.0" />
+    <link rel="stylesheet" type="text/css" href="./style.css?v=1.14.0" />
     <script type="module" src="./index.js"></script>
   </head>
   <body>

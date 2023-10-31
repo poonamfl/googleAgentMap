@@ -148,7 +148,30 @@ async function geocodeLatLng(geocoder, map,infowindow,agentinfo) {
             }
           }
         }
+        const content = document.createElement("div");
 
+        content.classList.add("agent");
+        content.classList.add(clrClass);
+        content.classList.add("collapsed");
+
+        content.innerHTML = `<div class="icon">
+                  <img src="${agentinfo.image}">
+              </div>
+              <div class="name">
+                ${agentinfo.name}
+              </div>
+              <div class="name2">
+                ${agentinfo.name}
+              </div>
+              <div class="line">
+                ${agentinfo.line1}
+              </div>
+              <div class="line">
+                ${agentinfo.line1}
+              </div>
+              <div class="line">
+                ${agentinfo.line1}
+              </div>`;
         // const agentTag = document.createElement("div");
 
         // agentTag.className = "agent-name "+clrClass;
@@ -162,16 +185,12 @@ async function geocodeLatLng(geocoder, map,infowindow,agentinfo) {
         const marker = new AdvancedMarkerElement({
           map,
           position: agentLocation,
-          content: beachFlagImg,
+          content: content,
           title: agentinfo.name,
         });
-        //marker.position
-        marker.addListener("click", ({ domEvent, latLng }) => {
-          const { target } = domEvent;
-    
-          infowindow.close();
-          infowindow.setContent(agentinfo.line1+"\n"+agentinfo.line1+"\n"+agentinfo.line3);
-          infowindow.open(marker.map, marker);
+        
+        marker.addListener("click", () => {
+          toggleHighlight(marker);
         });
 
       } else {
@@ -179,6 +198,15 @@ async function geocodeLatLng(geocoder, map,infowindow,agentinfo) {
       }
     })
     .catch((e) => window.alert("Geocoder failed due to: " + e));
+}
+function toggleHighlight(markerView) {
+  if (markerView.content.classList.contains("collapsed")) {
+    markerView.content.classList.remove("collapsed");
+    markerView.zIndex = 1;
+  } else {
+    markerView.content.classList.add("collapsed");
+    markerView.zIndex = null;
+  }
 }
 
 window.initMap = initMap;

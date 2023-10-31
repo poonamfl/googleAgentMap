@@ -16,15 +16,7 @@
     padding: 0;
   }
   /* HTML marker styles */
-.agent-name {
-  width: 40px;
-  height: auto;
-  border-radius: 8px;
-  color: #FFFFFF;
-  font-size: 14px;
-  padding: 5px 5px;
-  position: relative;
-}
+
 /* .red{
   background-color: #7d0303;
 }
@@ -34,15 +26,86 @@
 .green{
   background-color: #026e0f;
 } */
-.agent-name::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 100%;
-  transform: translate(-50%, 0);
-  width: 0;
-  height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-top: 8px solid #4285F4;
+
+.agent {
+    width:200px;
+    margin:10px;
+    padding :5px;
+    height : 127px;
+    border-radius: 8px;
+    background:whitesmoke;
+    /* background-color: #7d0303; */
+}
+.agent .icon {
+    width:23%;
+    margin:1%;
+    float:left;
+    /* background:green; */
+}
+.agent img {
+	  width: 40px;
+  height: auto;
+}
+.agent .name {
+    width:70%;
+    padding-bottom:3%;
+    margin:1%;
+    float:left;
+    background:whitesmoke;
+    font-size: 24px;
+}
+.agent .line {
+    width:97%;
+    padding-bottom:2%;
+    margin:1%;
+    float:left;
+    background:whitesmoke;
+    font-size: 15px;
+}
+.agent .name2 {
+  display: none;
+}
+.agent.collapsed .name2 {
+    width: min-content;
+    padding:2px;
+    margin:1%;
+    float:left;
+    color: #FFFFFF;
+    font-size: 10px;
+    display: block;
+}
+.agent.collapsed.red .name2 {
+  background-color: rgb(201, 94, 94);
+}
+.agent.collapsed.yellow .name2 {
+  background-color: rgb(189, 198, 71);
+  color: #000000;
+}
+.agent.collapsed.green .name2 {
+  background-color: rgb(104, 200, 100);
+}
+.agent.collapsed .name {
+  display: none;
+
+}
+.agent.collapsed .line {
+  display: none;
+}
+.agent.collapsed {
+    width:70px;
+    margin:10px;
+    padding :4px;
+    height : 62px;
+    border-radius: 8px;
+    background-color: transparent;
+    /* background-color: #7d0303; */
+}
+.agent.collapsed .icon {
+    width:95%;
+    margin:1%;
+    float:left;
+    /* background:green; */
+}
+#agentLocJson {
+  display: none;
 }
