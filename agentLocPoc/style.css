@@ -2,110 +2,133 @@
  * Always set the map height explicitly to define the size of the div element
  * that contains the map. 
  */
- #map {
-    height: 100%;
-  }
-  
-  /* 
+#map {
+  height: 100%;
+}
+
+/* 
    * Optional: Makes the sample page fill the window. 
    */
-  html,
-  body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-  }
-  /* HTML marker styles */
-
-/* .red{
-  background-color: #7d0303;
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
-.yellow{
-  background-color: #958902;
-}
-.green{
-  background-color: #026e0f;
-} */
 
+/* HTML marker styles */
 .agent {
-    width:200px;
-    margin:10px;
-    padding :5px;
-    height : 127px;
-    border-radius: 8px;
-    background:whitesmoke;
-    /* background-color: #7d0303; */
+  width: 200px;
+  margin: 10px;
+  padding: 5px;
+  height: 127px;
+  border-radius: 8px;
+  background: whitesmoke;
+  /* background-color: #7d0303;  */
 }
+
 .agent .icon {
-    width:23%;
-    margin:1%;
-    float:left;
-    /* background:green; */
+  width: 23%;
+  margin: 1%;
+  float: left;
+  /* background:green; */
 }
+
+.agent .icon2 {
+  display: none;
+}
+
 .agent img {
-	  width: 40px;
+  width: 40px;
   height: auto;
 }
+
 .agent .name {
-    width:70%;
-    padding-bottom:3%;
-    margin:1%;
-    float:left;
-    background:whitesmoke;
-    font-size: 24px;
+  width: 70%;
+  padding-bottom: 3%;
+  margin: 1%;
+  float: left;
+  background: whitesmoke;
+  font-size: 24px;
 }
+
 .agent .line {
-    width:97%;
-    padding-bottom:2%;
-    margin:1%;
-    float:left;
-    background:whitesmoke;
-    font-size: 15px;
+  width: 97%;
+  padding-bottom: 2%;
+  margin: 1%;
+  float: left;
+  background: whitesmoke;
+  font-size: 15px;
 }
+
 .agent .name2 {
   display: none;
 }
+
 .agent.collapsed .name2 {
-    width: min-content;
-    padding:2px;
-    margin:1%;
-    float:left;
-    color: #FFFFFF;
-    font-size: 10px;
-    display: block;
+  width: inherit;
+  float: left;
+  margin: 0px 0px 2px 0px;
+
+  display: block;
 }
-.agent.collapsed.red .name2 {
+
+.agent.collapsed p {
+  margin: auto;
+  width: fit-content;
+  padding: 2px;
+  font-size: 10px;
+  color: #FFFFFF;
+  display: block;
+}
+
+.agent.collapsed.red p {
   background-color: rgb(201, 94, 94);
 }
+
 .agent.collapsed.yellow .name2 {
   background-color: rgb(189, 198, 71);
   color: #000000;
 }
+
 .agent.collapsed.green .name2 {
   background-color: rgb(104, 200, 100);
 }
+
 .agent.collapsed .name {
   display: none;
 
 }
+
 .agent.collapsed .line {
   display: none;
 }
+
 .agent.collapsed {
-    width:70px;
-    margin:10px;
-    padding :4px;
-    height : 62px;
-    border-radius: 8px;
-    background-color: transparent;
-    /* background-color: #7d0303; */
+  width: 87px;
+  margin: 10px;
+  padding: 2px;
+  height: 62px;
+  border-radius: 8px;
+  background-color: transparent;
+  /* background-color: #7d0303;  */
 }
+
 .agent.collapsed .icon {
-    width:95%;
-    margin:1%;
-    float:left;
-    /* background:green; */
+  width: 45%;
+  margin: 2px;
+  float: left;
+  /* background:green; */
 }
+
+.agent.collapsed .icon2 {
+  width: 45%;
+  margin: 2px;
+  float: left;
+  /* background:green; */
+  display: block;
+}
+
 #agentLocJson {
   display: none;
 }

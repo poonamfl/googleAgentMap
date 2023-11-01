@@ -17,11 +17,11 @@ async function initMap() {
 
   const geocoder = new google.maps.Geocoder();
   getAgentData(geocoder, map);
-    setInterval(  function() {
-      console.log("errasing markers!!!!");
-      getAgentData(geocoder, map);
-    }, 60000);
-  
+  setInterval(function () {
+    console.log("errasing markers!!!!");
+    getAgentData(geocoder, map);
+  }, 60000);
+
 
 }
 function getAgentData(geocoder, map) {
@@ -40,30 +40,30 @@ function getAgentData(geocoder, map) {
     headers: {
       'Content-Type': 'application/json',
     }
-    }).then((response) => {
-        return response.json()
+  }).then((response) => {
+    return response.json()
   }).then((res) => {
     console.log(res);
-    plotAgentMarkers(geocoder, map,res);
+    plotAgentMarkers(geocoder, map, res);
   }).catch((error) => {
     alert("Error in fetching agent Data!!!");
     console.log(error)
   })
 
 }
-function erraseAgentMarkers(){
-let arrLen = AgentMarkerArr.length;
-for (let i = 0; i < arrLen; i++) {
-  AgentMarkerArr[i].map = null;
-}
+function erraseAgentMarkers() {
+  let arrLen = AgentMarkerArr.length;
+  for (let i = 0; i < arrLen; i++) {
+    AgentMarkerArr[i].map = null;
+  }
 }
 
-function plotAgentMarkers(geocoder, map,res){
+function plotAgentMarkers(geocoder, map, res) {
   erraseAgentMarkers();
   const agentinfo = res.agentDetails;
   for (let i = 0; i < agentinfo.length; i++) {
     //console.log(JSON.stringify(agentinfo[i]));
-    if(agentinfo[i].currLoc != null && agentinfo[i].currLoc !== "" ){
+    if (agentinfo[i].currLoc != null && agentinfo[i].currLoc !== "") {
       geocodeLatLng(geocoder, map, agentinfo[i]);
     }
   }
@@ -126,21 +126,24 @@ async function geocodeLatLng(geocoder, map, agentinfo) {
 
         content.innerHTML = `<div class="icon">
                   <img src="${agentinfo.image}">
+              </div> 
+              <div class="icon2">
+                  <img src="${agentinfo.image}">
               </div>
               <div class="name">
                 ${agentinfo.name}
               </div>
               <div class="name2">
-                ${agentinfo.name}
+                <p>${agentinfo.name}</p>
               </div>
               <div class="line">
                 ${agentinfo.line1}
               </div>
               <div class="line">
-                ${agentinfo.line1}
+                ${agentinfo.line2}
               </div>
               <div class="line">
-                ${agentinfo.line1}
+                ${agentinfo.line3}
               </div>`;
 
         const marker = new AdvancedMarkerElement({
